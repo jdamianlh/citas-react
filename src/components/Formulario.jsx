@@ -1,6 +1,6 @@
 import { useState } from "react"
-
-const Formulario = () => {
+import Error from "./Error"
+const Formulario = ({pacientes, setPacientes}) => {
 
     const [nombre, setNombre] = useState('')
     const [propietario, setPropietario] = useState('')
@@ -8,8 +8,32 @@ const Formulario = () => {
     const [fecha, setFecha] = useState('')
     const [sintomas, setSintomas] = useState('')
 
+    const [error, setError] = useState(false)
+
     const handleSubmit = (e) => {
         e.preventDefault()
+
+        if([nombre, propietario, email, fecha, sintomas].includes('')){
+            setError(true)
+            return
+        }
+        setError(false)
+
+        const objetoPaciente = {
+            nombre, 
+            propietario, 
+            email, 
+            fecha, 
+            sintomas
+        }
+
+        setPacientes([...pacientes, objetoPaciente])
+        setNombre('')
+        setPropietario('')
+        setEmail('')
+        setFecha('')
+        setSintomas('')
+        
         
     }
 
@@ -24,6 +48,9 @@ const Formulario = () => {
                 onSubmit={handleSubmit} 
                 className="bg-white shadow-md rounded-lg py-10 px-5 mb-10" 
                 action="">
+                
+                {error ? <Error/> : ''}
+
                 <div className="mb-5">
                     <label htmlFor="mascota" className="block text-gray-700 uppercase font-bold">Nombre mascota</label>
 
